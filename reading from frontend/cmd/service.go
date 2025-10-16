@@ -15,11 +15,11 @@ func Run(conf *config.Config) (err error) {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		if err := db.Close(); err != nil {
-			log.Println(err)
-		}
-	}()
+	defer func(db database.Database) {
+		err := db.Close()
+		if err != nil {
+	}
+	}(db)
 
 	if err = database.Migrate(db, []any{models.User{}}); err != nil {
 		return err
